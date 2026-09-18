@@ -1,12 +1,42 @@
 # IncidentLens
 
-IncidentLens is an MVP incident-triage agent built with Google's Agent
-Development Kit. It analyzes pasted server and application logs, extracts the
-most relevant error signals, and returns a structured incident report.
+**AI incident triage for production logs.**
 
-It is intended for first-pass incident review by engineers or incident
-responders. It is not a replacement for human judgment, metrics, traces, or
-service-owner investigation.
+IncidentLens is an MVP incident-triage agent built with Google's Agent
+Development Kit. Paste server or application logs and it returns a structured,
+evidence-grounded incident report: classification, severity, summary, cited log
+evidence, confidence, recommended next steps, and uncertainty.
+
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB)](https://www.python.org/)
+[![Google ADK](https://img.shields.io/badge/Google%20ADK-Agent%20Development%20Kit-4285F4)](https://google.github.io/adk-docs/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-local%20review%20UI-009688)](https://fastapi.tiangolo.com/)
+[![Status](https://img.shields.io/badge/status-MVP-yellow)](#current-status)
+
+![IncidentLens local review UI](docs/assets/incidentlens-ui.png)
+
+## Why IncidentLens
+
+Production incidents are noisy. Logs often contain a mix of useful signals,
+routine warnings, retries, and incomplete clues. IncidentLens helps responders
+turn that raw text into a concise first-pass incident report while keeping a
+clear boundary between observed facts, likely conclusions, and missing evidence.
+
+IncidentLens is designed to:
+
+- identify the strongest error signals in supplied logs
+- classify incidents as `Application`, `Infrastructure`, `Database`,
+  `Authentication / Authorization`, or `Unknown / Insufficient Evidence`
+- estimate severity as `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL`
+- cite the exact log evidence used for the report
+- avoid inventing facts that are not present in the logs
+- call out uncertainty when the logs are incomplete or ambiguous
+
+## Current Status
+
+This is an MVP for local review and evaluation. It is useful for demonstrating
+an evidence-first incident-triage workflow, but it is not production-ready and
+does not replace human judgment, metrics, traces, or service-owner
+investigation.
 
 ## What It Returns
 
@@ -45,6 +75,7 @@ incidentlens/
 |   |-- fast_api_app.py  # Scaffolded FastAPI backend server
 |   `-- app_utils/       # Scaffold utilities and A2A helpers
 |-- docs/
+|   |-- assets/
 |   |-- HUMAN_REVIEW.md
 |   |-- LOCAL_TEST_NOTES.md
 |   |-- EVAL_REPORT.md
@@ -61,8 +92,8 @@ incidentlens/
 From PowerShell:
 
 ```powershell
-git clone https://github.com/<owner>/incidentlens.git
-cd incidentlens
+git clone https://github.com/Ani-107/IncidentLens.git
+cd IncidentLens
 
 $env:OPENAI_API_KEY = '<set your key in this terminal>'
 
@@ -196,3 +227,6 @@ Edit deterministic log extraction hints in `app/tools.py`.
 
 This MVP intentionally avoids deployment, observability setup, Slack/email
 integration, automatic remediation, and complex multi-agent architecture.
+
+If IncidentLens helps you think more clearly during production incidents, a star
+helps other engineers find it.

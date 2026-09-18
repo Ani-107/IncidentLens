@@ -193,6 +193,7 @@ Thumbs.db
 
 # ADK
 .adk/
+.playwright-cli/
 
 # Agent CLI specific
 .persist_vector_store
