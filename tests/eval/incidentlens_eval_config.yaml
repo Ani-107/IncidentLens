@@ -1,0 +1,30 @@
+metrics_to_run:
+  - incidentlens_classification
+  - incidentlens_severity
+  - incidentlens_evidence_grounding
+  - incidentlens_hallucination
+  - incidentlens_uncertainty
+  - incidentlens_recommendations
+  - incidentlens_summary_quality
+  - incidentlens_format
+  - incidentlens_overall
+
+custom_metrics:
+  - name: incidentlens_classification
+    custom_function_file: metrics/classification.py
+  - name: incidentlens_severity
+    custom_function_file: metrics/severity.py
+  - name: incidentlens_evidence_grounding
+    custom_function_file: metrics/evidence_grounding.py
+  - name: incidentlens_hallucination
+    custom_function_file: metrics/hallucination.py
+  - name: incidentlens_uncertainty
+    custom_function_file: metrics/uncertainty.py
+  - name: incidentlens_recommendations
+    custom_function_file: metrics/recommendations.py
+  - name: incidentlens_summary_quality
+    custom_function_file: metrics/summary_quality.py
+  - name: incidentlens_format
+    custom_function_file: metrics/format.py
+  - name: incidentlens_overall
+    custom_function_file: metrics/overall.py

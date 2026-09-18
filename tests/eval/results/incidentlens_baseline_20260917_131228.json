@@ -1,0 +1,1297 @@
+{
+  "generated_at": "2026-09-17T13:14:28",
+  "dataset": "D:\\CodexTmp\\incidentlens-workspace\\tests\\eval\\datasets\\incidentlens-baseline.json",
+  "config": "D:\\CodexTmp\\incidentlens-workspace\\tests\\eval\\incidentlens_eval_config.yaml",
+  "url": "http://127.0.0.1:8000",
+  "app_name": "app",
+  "traces_dir": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228",
+  "grade_dir": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\grade_results\\baseline_20260917_131228",
+  "agents_cli_generate": {
+    "command": [
+      "agents-cli",
+      "eval",
+      "generate",
+      "--dataset",
+      "D:\\CodexTmp\\incidentlens-workspace\\tests\\eval\\datasets\\incidentlens-baseline.json",
+      "--url",
+      "http://127.0.0.1:8000",
+      "--app-name",
+      "app",
+      "--output",
+      "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228"
+    ],
+    "stdout": "Target: http://127.0.0.1:8000\nRunning inference on dataset: D:\\CodexTmp\\incidentlens-workspace\\tests\\eval\\datasets\\incidentlens-baseline.json\nWarning: Could not obtain credentials: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.\nDiscovered root_agent_name=incidentlens\n[generate] case[4] done\n[generate] case[2] done\n[generate] case[5] done\n[generate] case[1] done\n[generate] case[6] done\n[generate] case[3] done\n[generate] case[7] done\n[generate] case[0] done\n[generate] case[8] done\n[generate] case[10] done\n[generate] case[9] done\n[generate] case[13] done\n[generate] case[12] done\n[generate] case[15] done\n[generate] case[14] done\n[generate] case[11] done\n[generate] case[16] done\n[generate] case[18] done\n[generate] case[19] done\n[generate] case[17] done\nTraces saved to D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json\n",
+    "returncode": 0
+  },
+  "agents_cli_grade": {
+    "command": [
+      "agents-cli",
+      "eval",
+      "grade",
+      "--traces",
+      "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228",
+      "--config",
+      "D:\\CodexTmp\\incidentlens-workspace\\tests\\eval\\incidentlens_eval_config.yaml",
+      "--output",
+      "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\grade_results\\baseline_20260917_131228"
+    ],
+    "stdout": "Loaded 9 local custom metric(s). These execute in-process; user-supplied code runs with the CLI's privileges.\nLoading trace file(s) from D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228...\nLoaded 20 total eval cases from 1 file(s).\nRunning evaluation for metrics: incidentlens_classification, incidentlens_severity, incidentlens_evidence_grounding, incidentlens_hallucination, incidentlens_uncertainty, incidentlens_recommendations, incidentlens_summary_quality, incidentlens_format, incidentlens_overall at 15/s (--qps to change)...\nagents-cli v1.6.1\nError: Evaluation failed.\n",
+    "returncode": 1,
+    "latest_grade_result": null,
+    "error": "agents-cli eval grade failed; deterministic trace analysis still completed."
+  },
+  "analysis": {
+    "total_scenarios": 20,
+    "passed_scenarios": 7,
+    "failed_scenarios": 13,
+    "metric_pass_counts": {
+      "classification": 17,
+      "severity": 19,
+      "evidence_grounding": 20,
+      "hallucination": 20,
+      "uncertainty": 10,
+      "recommendations": 16,
+      "summary_quality": 16,
+      "format": 20,
+      "overall": 7
+    },
+    "results_by_incident_classification": {
+      "Application": {
+        "total": 3,
+        "passed": 0
+      },
+      "Infrastructure": {
+        "total": 4,
+        "passed": 1
+      },
+      "Database": {
+        "total": 5,
+        "passed": 3
+      },
+      "Authentication / Authorization": {
+        "total": 4,
+        "passed": 3
+      },
+      "Unknown / Insufficient Evidence": {
+        "total": 4,
+        "passed": 0
+      }
+    },
+    "results_by_severity": {
+      "MEDIUM": {
+        "total": 2,
+        "passed": 0
+      },
+      "HIGH/CRITICAL": {
+        "total": 3,
+        "passed": 0
+      },
+      "MEDIUM/HIGH": {
+        "total": 4,
+        "passed": 1
+      },
+      "LOW/MEDIUM": {
+        "total": 7,
+        "passed": 3
+      },
+      "HIGH": {
+        "total": 2,
+        "passed": 1
+      },
+      "LOW": {
+        "total": 1,
+        "passed": 1
+      },
+      "CRITICAL": {
+        "total": 1,
+        "passed": 1
+      }
+    },
+    "failure_pattern_counts": {
+      "uncertainty problem": 10,
+      "classification problem": 3,
+      "prompt/instruction problem": 4,
+      "summary quality problem": 4,
+      "severity problem": 1
+    },
+    "cases": [
+      {
+        "eval_case_id": "IL-001-clear-application-typeerror",
+        "description": "Clear application exception with HTTP 500 and stack trace.",
+        "category_group": "Clear application incident",
+        "expected_classification": "Application",
+        "acceptable_severities": [
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Application'; acceptable=['Application']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing case uncertainty terms; expected one of ['single request', 'limited', 'missing', 'additional logs']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "uncertainty: missing case uncertainty terms; expected one of ['single request', 'limited', 'missing', 'additional logs']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\n**Category:** Application  \nThis incident is categorized as an \"Application\" issue based on observed error logs indicating internal server errors and type errors.\n\n## Severity\n**Severity:** MEDIUM  \nThe observed logs show a repeated TypeError that caused an HTTP 500 error, indicating a degradation in service but not a complete failure, suggesting a medium-level impact on functionality.\n\n## Summary\nThe logs indicate that a request to the orders API resulted in an HTTP 500 Internal Server Error, with an underlying TypeError due to an attempt to read properties of an undefined object while calculating an invoice total. This suggests a malfunction in the application logic. The errors are logged sequentially within a short time span, reflecting that this issue affects the specific request but does not indicate a widespread outage.\n\n## Evidence From Logs\n- Line 2: `2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 HTTP 500 Internal Server Error`\n- Line 3: `2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 Unhandled TypeError: Cannot read properties of undefined (reading 'total')`\n- Line 4: `2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 stacktrace: TypeError at calculateInvoiceTotal (/srv/app/invoice.js:88:14)`\n- Line 5: `2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 stacktrace: at handleGetOrder (/srv/app/routes/orders.js:142:9)`\n\n## Confidence\n**Confidence:** HIGH  \nThe evidence from the logs is clear and shows a direct causal relationship between a TypeError and the resulting HTTP 500 error, providing a high level of confidence in the classification.\n\n## Recommended Next Investigation Steps\n- Review the implementation of the `calculateInvoiceTotal` function to identify why an undefined object is being accessed.\n- Investigate the code flow leading to the `handleGetOrder` function, particularly focusing on input validations and data integrity before the invoicing logic is called.\n- Check the error handling mechanism to ensure that exceptions are caught and managed appropriately to prevent server errors.\n\n## Uncertainty / Missing Evidence\nThere is insufficient evidence regarding the broader impact of this incident on users or whether similar errors are occurring across other requests. There are no logs indicating the number of affected users or the operational state of the overall service.",
+        "detected_classification": "Application",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-002-clear-infrastructure-oom",
+        "description": "Clear infrastructure incident caused by memory exhaustion and no healthy endpoints.",
+        "category_group": "Clear infrastructure incident",
+        "expected_classification": "Infrastructure",
+        "acceptable_severities": [
+          "HIGH",
+          "CRITICAL"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 1.0,
+            "explanation": "Detected classification='Application'; acceptable=['Infrastructure']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='CRITICAL'; acceptable=['HIGH', 'CRITICAL']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['traffic', 'load', 'prior', 'missing']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.0,
+            "explanation": "classification: Detected classification='Application'; acceptable=['Infrastructure']. | uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['traffic', 'load', 'prior', 'missing']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "classification",
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nInfrastructure, based on observed signals indicating memory exhaustion and subsequent application failure.\n\n## Severity\nCRITICAL, due to the evidence of the application being unable to handle requests and reporting no healthy endpoints, indicating a service-wide outage.\n\n## Summary\nThe logs reveal that the `payments-api` experienced critical failures due to excessive memory usage, resulting in the container being OOMKilled (out of memory). Following this, health checks failed, and the load balancer reported no healthy endpoints available for the service. This suggests a severe impact, likely affecting all users of the `payments-api`.\n\n## Evidence From Logs\n- Line 1: `2026-09-17T14:05:00Z WARN payments-api pod=payments-api-7c9 memory usage 96 percent limit=1024Mi`\n- Line 2: `2026-09-17T14:05:02Z ERROR kernel pod=payments-api-7c9 container=app OOMKilled memory cgroup out of memory`\n- Line 3: `2026-09-17T14:05:03Z ERROR kubelet pod=payments-api-7c9 container app exited code=137 reason=OOMKilled`\n- Line 4: `2026-09-17T14:05:06Z ERROR payments-api health check failed after container restart status=503`\n- Line 5: `2026-09-17T14:05:10Z WARN load-balancer upstream payments-api no healthy endpoints available`\n\n## Confidence\nMEDIUM, based on the clear indicators of infrastructure issues and their effect on application behavior. However, there might be additional underlying issues not reflected in the logs.\n\n## Recommended Next Investigation Steps\n1. Review the resource allocation and usage logs for the `payments-api` pod to identify patterns leading to the OOM condition.\n2. Check the Kubernetes cluster metrics to evaluate if other pods or services are impacting resource availability.\n3. Investigate whether any recent deployments or changes could have contributed to the sudden increase in memory consumption.\n\n## Uncertainty / Missing Evidence\nThere is a lack of detailed metrics on memory usage over time, which would help understand the escalation of the issue. Additionally, insights into user impact or the number of requests leading to this scenario are not captured in the logs.",
+        "detected_classification": "Application",
+        "detected_severity": "CRITICAL",
+        "failure_patterns": [
+          "classification problem",
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-003-clear-database-deadlock",
+        "description": "Clear database incident with deadlocks and transaction failures.",
+        "category_group": "Clear database incident",
+        "expected_classification": "Database",
+        "acceptable_severities": [
+          "MEDIUM",
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Database'; acceptable=['Database']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['MEDIUM', 'HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['impact', 'additional']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nDatabase, based on observed errors related to database transactions.\n\n## Severity\nMEDIUM, due to repeated errors indicating transaction failures with deadlock detection, which could affect billing processes.\n\n## Summary\nThe logs indicate that the billing worker encountered a deadlock while processing a database transaction, leading to multiple errors and a rollback after a lock wait timeout. A total of three errors and one warning were logged within a short timeframe of about seven seconds, reflecting a likely issue with concurrent database access or configuration.\n\n## Evidence From Logs\n- Line 2: `2026-09-17T14:10:03Z ERROR billing-worker database transaction failed db=postgres database=billing error=\"deadlock detected\"`\n- Line 3: `2026-09-17T14:10:04Z ERROR postgres pid=7312 relation=invoices deadlock detected while updating row`\n- Line 4: `2026-09-17T14:10:05Z WARN billing-worker retrying SQL transaction attempt=1`\n- Line 5: `2026-09-17T14:10:07Z ERROR billing-worker transaction rollback after lock wait timeout`\n\n## Confidence\nHIGH, as the logs provide clear indications of deadlock and transaction failures.\n\n## Recommended Next Investigation Steps\n1. Review database locking mechanisms and configurations to identify the cause of the deadlock.\n2. Analyze transaction patterns to see if there are recurring conflicts during high load periods.\n3. Investigate if the transaction isolation levels are contributing to the deadlock situation.\n\n## Uncertainty / Missing Evidence\nNo specific request impact or user feedback is available in the logs to indicate how widely this issue has affected services or transactions. Additional context, such as workload volume and parallel processing patterns, would be beneficial in assessing the full impact.",
+        "detected_classification": "Database",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-004-clear-auth-token-validation",
+        "description": "Clear authentication and authorization failures.",
+        "category_group": "Clear authentication/authorization incident",
+        "expected_classification": "Authentication / Authorization",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Authentication / Authorization'; acceptable=['Authentication / Authorization']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['additional']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nAuthentication / Authorization. This classification is supported by all observed error signals indicating issues related to token validation and authorization.\n\n## Severity\nLOW. The logs indicate authentication failures and warnings without evidence of widespread impact or critical service disruption.\n\n## Summary\nThe logs show multiple warnings and an error related to authentication and authorization processes. A request to retrieve a profile resulted in a 401 Unauthorized error due to a failed token validation, and there were also warnings about an expired OAuth token and a 403 Forbidden response for an unauthorized access attempt. However, there is no evidence that these issues have led to significant user impact or broader service outages.\n\n## Evidence From Logs\n- Line 2: \"2026-09-17T14:15:01Z WARN gateway request_id=req-auth-1 HTTP 401 Unauthorized path=/api/profile\"\n- Line 3: \"2026-09-17T14:15:01Z ERROR auth-service request_id=req-auth-1 token validation failed reason=\\\"signature verification failed\\\" kid=prod-key-17\"\n- Line 4: \"2026-09-17T14:15:02Z WARN auth-service request_id=req-auth-2 OAuth token expired audience=orders-api\"\n- Line 5: \"2026-09-17T14:15:04Z WARN gateway request_id=req-auth-3 HTTP 403 Forbidden path=/admin/users role=viewer\"\n\n## Confidence\nHIGH, because the logs consistently show multiple authentication-related issues with complete details, allowing clear interpretation of the incident.\n\n## Recommended Next Investigation Steps\n- Investigate the root cause of the token validation failure (line 3) to determine why the signature verification failed.\n- Review the token expiration policy and user roles to understand the context of the expired OAuth token (line 4) and the HTTP 403 response (line 5).\n- Analyze user behavior patterns leading to these errors to check if they are isolated incidents or part of larger authentication issues.\n\n## Uncertainty / Missing Evidence\nNo critical missing evidence; however, additional context such as user sessions, other system metrics, or a broader traffic log could provide insights into whether users were affected and how widespread these authentication failures are.",
+        "detected_classification": "Authentication / Authorization",
+        "detected_severity": "LOW",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-005-unknown-generic-service-failure",
+        "description": "Generic errors without enough evidence for a root-cause category.",
+        "category_group": "Unknown / insufficient evidence",
+        "expected_classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Unknown / Insufficient Evidence'; acceptable=['Unknown / Insufficient Evidence']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['insufficient', 'not enough', 'missing', 'cannot determine']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['insufficient', 'not enough', 'missing', 'cannot determine']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nUnknown / Insufficient Evidence. The logs do not provide clear category-specific signals or sufficient context.\n\n## Severity\nLOW. The impact appears isolated to a specific job, with no evidence of broader user impact indicated by the available logs.\n\n## Summary\nThe logs show an error associated with a worker job, specifically indicating an operation failure and a subsequent \"service unavailable\" message. However, there are not enough details to determine the underlying cause or whether this incident affects a wider service or user base.\n\n## Evidence From Logs\n- Line 2: \"2026-09-17T14:20:02Z ERROR worker job_id=job-5001 operation failed\"\n- Line 3: \"2026-09-17T14:20:03Z ERROR service unavailable\"\n\n## Confidence\nMEDIUM, as the log signals suggest issues but lack categorization context and broader service impact evidence.\n\n## Recommended Next Investigation Steps\n- Review the worker job details to understand the operation that failed.\n- Check the service status at the time of the incident for any broader issues.\n- Correlate with other logs during the same time frame to find related issues.\n\n## Uncertainty / Missing Evidence\nThere is a lack of information regarding the impact of the \"service unavailable\" message and whether it is linked to the worker job. Additionally, the logs do not specify which service was unavailable, making it difficult to assess the severity of the situation comprehensively.",
+        "detected_classification": "Unknown / Insufficient Evidence",
+        "detected_severity": "LOW",
+        "failure_patterns": [
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-006-mixed-application-database",
+        "description": "Application errors are present, but database connection exhaustion is the strongest signal.",
+        "category_group": "Mixed application + database signals",
+        "expected_classification": "Database",
+        "acceptable_severities": [
+          "MEDIUM",
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Database'; acceptable=['Database']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['MEDIUM', 'HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing case uncertainty terms; expected one of ['likely', 'appears', 'application errors', 'downstream']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "uncertainty: missing case uncertainty terms; expected one of ['likely', 'appears', 'application errors', 'downstream']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nDatabase. This classification is based on observed errors indicating issues with database connections and query execution.\n\n## Severity\nMEDIUM. The observed impact includes a failed SQL query and a potential degradation of service due to an exhausted connection pool, but there is no evidence of a broad outage.\n\n## Summary\nThe logs indicate a sequence of errors occurring in the checkout process, starting with a database connection pool exhaustion followed by an SQL query timeout and an HTTP 500 error response. A NullPointerException occurred when trying to render the error response, suggesting further complications due to the initial database issues.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T14:25:00Z INFO checkout-api request_id=req-mix-db POST /checkout started\"\n- Line 2: \"2026-09-17T14:25:01Z ERROR checkout-api request_id=req-mix-db database connection pool exhausted active=80 idle=0 max=80 db=orders\"\n- Line 3: \"2026-09-17T14:25:02Z ERROR checkout-api request_id=req-mix-db SQL query timeout after 30000ms query=insert_order\"\n- Line 4: \"2026-09-17T14:25:03Z ERROR checkout-api request_id=req-mix-db HTTP 500 Internal Server Error route=/checkout\"\n- Line 5: \"2026-09-17T14:25:04Z ERROR checkout-api request_id=req-mix-db failed to render error response: NullPointerException\"\n\n## Confidence\nHIGH. The logs clearly indicate a sequence of errors directly related to database connectivity and subsequent application errors.\n\n## Recommended Next Investigation Steps\n1. Review the connection pool configuration for the database to ensure it can accommodate the required number of connections.\n2. Analyze database performance metrics around the time of the incident to identify potential bottlenecks.\n3. Investigate the application logic related to error handling for the HTTP 500 response and the resulting NullPointerException.\n\n## Uncertainty / Missing Evidence\nThere is limited information about the overall application load and user impact. Additionally, there are no detailed logs on preceding events that may have led to the connection pool exhaustion.",
+        "detected_classification": "Database",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-007-mixed-application-infrastructure",
+        "description": "Application 503s follow DNS/network failures; infrastructure should be primary.",
+        "category_group": "Mixed application + infrastructure signals",
+        "expected_classification": "Infrastructure",
+        "acceptable_severities": [
+          "MEDIUM",
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Infrastructure'; acceptable=['Infrastructure']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['MEDIUM', 'HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['likely', 'upstream', 'confirm', 'missing']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['likely', 'upstream', 'confirm', 'missing']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nInfrastructure, likely caused by issues with service resolution and connectivity for the `catalog-api`.\n\n## Severity\nMEDIUM, as there are multiple errors suggesting widespread service degradation (e.g., DNS lookup failures and connection refusals), but there is no evidence of a complete service outage.\n\n## Summary\nThe logs indicate issues in the infrastructure, particularly with the `catalog-api`. There were multiple errors leading to service unavailability, including DNS resolution failures and connection issues. The presence of a warning message about numerous DNS lookup failures further supports that services depended on the `catalog-api` were likely affected.\n\n## Evidence From Logs\n- Line 1: `2026-09-17T14:30:00Z ERROR frontend-api request_id=req-net upstream catalog-api ENOTFOUND catalog-api.service.local`\n- Line 2: `2026-09-17T14:30:01Z ERROR frontend-api request_id=req-net connection refused upstream=10.12.4.22:8080`\n- Line 3: `2026-09-17T14:30:02Z ERROR frontend-api request_id=req-net HTTP 503 Service Unavailable route=/products`\n- Line 4: `2026-09-17T14:30:03Z ERROR frontend-api request_id=req-net unhandled exception while fetching catalog response`\n- Line 5: `2026-09-17T14:30:05Z WARN kube-dns lookup failures service=catalog-api count=91 window=60s`\n\n## Confidence\nMEDIUM, since multiple error signals support the observed infrastructure issues but the specific impact on users is not detailed in the logs.\n\n## Recommended Next Investigation Steps\n- Investigate the `catalog-api` service's health and connectivity status.\n- Review historical data for DNS resolution and network connectivity issues pertaining to the `catalog-api`.\n- Check whether there are any ongoing incidents or maintenance activities affecting the `catalog-api` or related services.\n\n## Uncertainty / Missing Evidence\nThe logs do not provide information on the extent of the user impact or whether the catalog-api was fully down or intermittently failing. Details on the time and nature of any traffic to the affected services are also absent.",
+        "detected_classification": "Infrastructure",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-008-conflicting-signals",
+        "description": "Database and auth signals appear for different requests with no clear single incident.",
+        "category_group": "Conflicting signals",
+        "expected_classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": [
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 1.0,
+            "explanation": "Detected classification='Authentication / Authorization'; acceptable=['Unknown / Insufficient Evidence']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing case uncertainty terms; expected one of ['conflicting', 'multiple', 'insufficient', 'separate']"
+          },
+          "recommendations": {
+            "score": 1.0,
+            "explanation": "missing recommendation terms; expected one of ['request_id', 'correlate', 'separate', 'timeline']"
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 3.5,
+            "explanation": "classification: Detected classification='Authentication / Authorization'; acceptable=['Unknown / Insufficient Evidence']. | uncertainty: missing case uncertainty terms; expected one of ['conflicting', 'multiple', 'insufficient', 'separate'] | recommendations: missing recommendation terms; expected one of ['request_id', 'correlate', 'separate', 'timeline']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "classification",
+          "uncertainty",
+          "recommendations",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nAuthentication / Authorization, supported by observed logs related to token validation and unauthorized access.\n\n## Severity\nMEDIUM, as evidenced by repeated authorization errors related to the expired token and unauthorized access attempts without indication of a broad user impact.\n\n## Summary\nThe logs indicate multiple issues occurring within a short timeframe, particularly focusing on authentication errors. The token validation failure for a user and associated unauthorized access attempts suggest problems with user sessions. Additionally, database connection timeouts and SQL query timeouts were also observed, which may contribute to the overall system instability.\n\n## Evidence From Logs\n- **Line 1:** `2026-09-17T14:35:00Z ERROR api request_id=req-a database connection timeout after 10000ms db=orders`\n- **Line 2:** `2026-09-17T14:35:01Z WARN gateway request_id=req-b HTTP 401 Unauthorized path=/api/profile`\n- **Line 3:** `2026-09-17T14:35:02Z ERROR auth-service request_id=req-b token validation failed reason=\"expired token\"`\n- **Line 4:** `2026-09-17T14:35:03Z ERROR api request_id=req-c SQL query timeout query=get_cart`\n- **Line 5:** `2026-09-17T14:35:04Z WARN gateway request_id=req-d HTTP 403 Forbidden path=/admin role=viewer`\n\n## Confidence\nMEDIUM, due to the presence of multiple related signals that suggest a pattern of authentication failures, though the overall impact on users is not explicitly detailed.\n\n## Recommended Next Investigation Steps\n- Investigate the root cause of the token expiration and any related processes for handling user sessions.\n- Review the database performance metrics during the timestamps in question to determine if the timeouts had any correlation with high traffic or resource saturation.\n- Examine the logs for any additional traffic patterns or errors that may have led to the authorization errors.\n\n## Uncertainty / Missing Evidence\nThere is uncertainty about the overall impact of these errors on user sessions and whether any users were significantly affected beyond those explicitly listed in the logs. Additional context around user behavior and system load would be helpful to assess the situation fully.",
+        "detected_classification": "Authentication / Authorization",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "classification problem",
+          "prompt/instruction problem",
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-009-noisy-logs",
+        "description": "Noisy logs with irrelevant debug/info lines and one real database signal.",
+        "category_group": "Noisy logs containing irrelevant information",
+        "expected_classification": "Database",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Database'; acceptable=['Database']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['impact']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nDatabase, based on observed errors related to database connectivity issues.\n\n## Severity\nLOW, as the connection timeout to the database resulted in a warning about retrying a query, suggesting isolated failures without evidence of widespread impact.\n\n## Summary\nThe logs indicate a database connection timeout error occurring during a request to the cart API, specifically showing a timeout after 30 seconds. Following this error, a warning log indicates that the system attempted to retry the database query. There are no indications of more severe issues or widespread outages affecting other systems.\n\n## Evidence From Logs\n- Line 4: \"2026-09-17T14:40:03Z ERROR cart-api request_id=req-noise database connection timeout after 30000ms db=carts host=postgres-cart\"\n- Line 7: \"2026-09-17T14:40:06Z WARN cart-api request_id=req-noise retrying database query attempt=1\"\n\n## Confidence\nHIGH, as the logs contain clear error and warning messages directly related to the database.\n\n## Recommended Next Investigation Steps\n- Review the database connection settings and logs for the postgres-cart instance to identify potential causes for the timeout.\n- Check if this issue is persistent or recurrent by querying historical logs for similar errors.\n- Monitor the performance metrics of the database to determine if resource exhaustion or configuration issues are occurring.\n\n## Uncertainty / Missing Evidence\nThere is no knowledge about the frequency of the timeouts or whether they impact the user experience significantly, which could influence the assessment of overall severity.",
+        "detected_classification": "Database",
+        "detected_severity": "LOW",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-010-duplicate-errors",
+        "description": "Duplicate stack traces from repeated log emission should not inflate severity too aggressively.",
+        "category_group": "Duplicate errors",
+        "expected_classification": "Application",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Application'; acceptable=['Application']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['additional']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 1.0,
+            "explanation": "summary lacks expected terms; expected one of ['profile-api', 'duplicate']"
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "summary_quality: summary lacks expected terms; expected one of ['profile-api', 'duplicate']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "summary_quality",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nApplication - This classification is supported by the presence of error messages indicating an application-level issue.\n\n## Severity\nMEDIUM - The logs indicate repeated NullPointerExceptions resulting in HTTP 500 errors, showing degraded behavior but not a complete outage.\n\n## Summary\nThe logs indicate that the profile API experienced multiple HTTP 500 errors due to NullPointerExceptions. This suggests a bug in the application, specifically within the `buildProfileResponse` method, which indicates recurring issues but does not point to a total service outage. The failures were observed across multiple requests in the same timeframe.\n\n## Evidence From Logs\n- **Line 1**: \"2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup HTTP 500 Internal Server Error\"\n- **Line 2**: \"2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\"\n- **Line 3**: \"2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\"\n- **Line 4**: \"2026-09-17T14:45:01Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\"\n- **Line 5**: \"2026-09-17T14:45:01Z ERROR profile-api request_id=req-dup response status=500 duration_ms=223\"\n\n## Confidence\nHIGH - The evidence provides clear indicators of recurring application-level errors and sufficient information to classify the severity.\n\n## Recommended Next Investigation Steps\n- Review the implementation of the `buildProfileResponse` method to identify potential causes for the NullPointerExceptions.\n- Analyze usage patterns to determine if specific inputs are causing the errors.\n- Investigate if any recent changes or deployments coincide with the timing of these errors.\n\n## Uncertainty / Missing Evidence\nThere is no additional context regarding the volume of requests or user impact, which could influence the severity classification further. Furthermore, there are no indications of surrounding traffic or related logs that might provide a full picture of the incident's impact.",
+        "detected_classification": "Application",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "summary quality problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-011-incomplete-logs",
+        "description": "Truncated stack trace with no root-cause context.",
+        "category_group": "Incomplete logs",
+        "expected_classification": "Application",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Application'; acceptable=['Application']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing case uncertainty terms; expected one of ['truncated', 'insufficient', 'missing', 'root cause']"
+          },
+          "recommendations": {
+            "score": 1.0,
+            "explanation": "missing recommendation terms; expected one of ['full stack trace', 'request_id', 'surrounding logs']"
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.0,
+            "explanation": "uncertainty: missing case uncertainty terms; expected one of ['truncated', 'insufficient', 'missing', 'root cause'] | recommendations: missing recommendation terms; expected one of ['full stack trace', 'request_id', 'surrounding logs']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "recommendations",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\n**Category:** Application - This classification is supported by observed logs that indicate an application error.\n\n## Severity\n**Severity:** MEDIUM - The logs show multiple errors related to an exception while handling a request, indicating a likely degradation but no evidence of a broad outage.\n\n## Summary\nThe provided logs indicate an application error occurring at a specific request (request_id=req-trunc) with an exception while handling the request. The context of the error is limited, but it points to a line in the application code where the failure occurred.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T14:50:00Z ERROR api request_id=req-trunc exception while handling request\"\n- Line 2: \"2026-09-17T14:50:00Z ERROR api request_id=req-trunc stacktrace: at handler (/srv/app/routes.js:220:11)\"\n- Line 3: \"2026-09-17T14:50:00Z ERROR api request_id=req-trunc stacktrace: ... truncated ...\"\n\n## Confidence\n**Confidence:** MEDIUM - While there are multiple error signals, the evidence is limited in scope and lacks surrounding context that may indicate the full impact.\n\n## Recommended Next Investigation Steps\n1. Review the handling logic at `/srv/app/routes.js:220` to understand the conditions leading to the error.\n2. Check if the same exception has been logged for other request IDs around the same time.\n3. Investigate if there are any downstream effects or customer impacts from this error, including whether similar requests are failing.\n\n## Uncertainty / Missing Evidence\nThe logs are notable for being very small and being limited to a single request ID. There is no evidence indicating whether this was an isolated incident or part of a larger problem, nor is there any information on the impact to users.",
+        "detected_classification": "Application",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "prompt/instruction problem",
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-012-large-log-input",
+        "description": "Large-ish input with many benign lines and repeated auth errors near the end.",
+        "category_group": "Large log input",
+        "expected_classification": "Authentication / Authorization",
+        "acceptable_severities": [
+          "MEDIUM",
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Authentication / Authorization'; acceptable=['Authentication / Authorization']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='HIGH'; acceptable=['MEDIUM', 'HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['affected users', 'scope', 'confirm', 'missing']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.5,
+            "explanation": "uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['affected users', 'scope', 'confirm', 'missing']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nAuthentication / Authorization, likely due to multiple failed token validations.\n\n## Severity\nHIGH, as there are multiple unauthorized access attempts with a significant failure rate, indicating a disruption in user authentication.\n\n## Summary\nThe logs reveal that two requests resulted in HTTP 401 Unauthorized responses due to token validation failures flagged as \"issuer mismatch\". This issue seems to be affecting user authentication consistently, with an increasing failure rate logged at 38 failures per minute, well above the baseline of 4. Such repeated failures indicate a critical issue with the authentication service.\n\n## Evidence From Logs\n- Line 7: `2026-09-17T14:55:06Z WARN gateway request_id=req-large-1 HTTP 401 Unauthorized path=/api/profile`\n- Line 8: `2026-09-17T14:55:06Z ERROR auth-service request_id=req-large-1 token validation failed reason=\"issuer mismatch\" issuer=staging-idp`\n- Line 10: `2026-09-17T14:55:08Z WARN gateway request_id=req-large-2 HTTP 401 Unauthorized path=/api/orders`\n- Line 11: `2026-09-17T14:55:08Z ERROR auth-service request_id=req-large-2 token validation failed reason=\"issuer mismatch\" issuer=staging-idp`\n- Line 14: `2026-09-17T14:55:11Z WARN gateway auth failure rate=38/min baseline=4/min`\n\n## Confidence\nMEDIUM, due to the observed failures but without concrete evidence about the extent of impact on user access or overall system functionality.\n\n## Recommended Next Investigation Steps\n- Review the configuration of the authentication issuer to determine why mismatches are occurring.\n- Analyze user patterns to confirm if there is a widespread impact on user access or specific user segments being affected.\n- Collect detailed logs around the time of token requests to assess the patterns of failures.\n\n## Uncertainty / Missing Evidence\nThe logs do not provide information on the total number of requests attempted or the impact on end-users, making it difficult to evaluate the full extent of the authentication issue. Additionally, surrounding context or recent changes related to the authentication system could provide further insight.",
+        "detected_classification": "Authentication / Authorization",
+        "detected_severity": "HIGH",
+        "failure_patterns": [
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-013-multiple-unrelated-incidents",
+        "description": "Two unrelated incidents in one input should not be forced into one root cause.",
+        "category_group": "Multiple unrelated incidents in the same input",
+        "expected_classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": [
+          "HIGH",
+          "CRITICAL"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 1.0,
+            "explanation": "Detected classification='Infrastructure'; acceptable=['Unknown / Insufficient Evidence']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='HIGH'; acceptable=['HIGH', 'CRITICAL']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['separate']"
+          },
+          "recommendations": {
+            "score": 1.0,
+            "explanation": "missing recommendation terms; expected one of ['separate', 'timeline', 'request_id', 'job_id']"
+          },
+          "summary_quality": {
+            "score": 1.0,
+            "explanation": "summary lacks expected terms; expected one of ['multiple', 'unrelated']"
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 3.5,
+            "explanation": "classification: Detected classification='Infrastructure'; acceptable=['Unknown / Insufficient Evidence']. | recommendations: missing recommendation terms; expected one of ['separate', 'timeline', 'request_id', 'job_id'] | summary_quality: summary lacks expected terms; expected one of ['multiple', 'unrelated']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "classification",
+          "recommendations",
+          "summary_quality",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nInfrastructure - This is supported by observed signals indicating repeated issues with memory and pod failures.\n\n## Severity\nHIGH - The logs indicate multiple infrastructure failures, including an Out of Memory (OOM) condition resulting in container termination and a database deadlock leading to transaction rollbacks.\n\n## Summary\nThe logs report a combination of issues in the infrastructure layer, specifically with memory management leading to OOMKilled incidents in the media worker, alongside database deadlock errors. The database deadlock occurred during an inventory API request, which further indicates systemic stress or mismanagement. These failures suggest that operational functionality may be significantly impaired.\n\n## Evidence From Logs\n- Line 1: `2026-09-17T15:00:00Z ERROR inventory-api request_id=req-inv database deadlock detected table=stock_reservations`\n- Line 2: `2026-09-17T15:00:01Z ERROR inventory-api request_id=req-inv transaction rollback after lock wait timeout`\n- Line 3: `2026-09-17T15:00:20Z ERROR media-worker job_id=img-77 OOMKilled memory cgroup out of memory`\n- Line 4: `2026-09-17T15:00:21Z ERROR kubelet pod=media-worker-2 container app exited code=137 reason=OOMKilled`\n\n## Confidence\nMEDIUM - While there are several clear error messages indicating issues, the lack of surrounding context or incoming traffic logs limits confidence in determining the exact systemic impact or correlation.\n\n## Recommended Next Investigation Steps\n1. Review memory usage metrics and limits for the media-worker container to assess whether the OOM conditions are due to insufficient memory allocation or excessive memory consumption.\n2. Investigate the database configuration and query patterns leading to deadlock scenarios, including analyzing active transactions at the times of the errors.\n3. Check if any recent changes in workloads or deployments correlate with the timing of these failures.\n\n## Uncertainty / Missing Evidence\nThe evidence does not provide information about the overall system impact or the number of affected users. Additionally, there is no temporal correlation between the database deadlock and the OOMKilled messages, leaving uncertainty regarding whether they are related symptoms of a broader issue or separate incidents.",
+        "detected_classification": "Infrastructure",
+        "detected_severity": "HIGH",
+        "failure_patterns": [
+          "classification problem",
+          "prompt/instruction problem",
+          "summary quality problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-014-database-causing-application-failures",
+        "description": "Database failure causes application HTTP 500s; database should be primary.",
+        "category_group": "Database failure causing application failures",
+        "expected_classification": "Database",
+        "acceptable_severities": [
+          "HIGH",
+          "CRITICAL"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Database'; acceptable=['Database']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='CRITICAL'; acceptable=['HIGH', 'CRITICAL']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['impact']"
+          },
+          "recommendations": {
+            "score": 1.0,
+            "explanation": "missing recommendation terms; expected one of ['postgres', 'database availability', 'dependency', 'connection refused']"
+          },
+          "summary_quality": {
+            "score": 1.0,
+            "explanation": "summary lacks expected terms; expected one of ['postgres', 'checkout-api']"
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.0,
+            "explanation": "recommendations: missing recommendation terms; expected one of ['postgres', 'database availability', 'dependency', 'connection refused'] | summary_quality: summary lacks expected terms; expected one of ['postgres', 'checkout-api']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "recommendations",
+          "summary_quality",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nDatabase, as multiple logs indicate issues with database connectivity and the impact on service functionality.\n\n## Severity\nCRITICAL, due to the evidence of repeated database failures and a significant impact on the checkout functionality, including a status 500 response indicating unavailability.\n\n## Summary\nThe logs reveal a critical incident where the database service is unavailable, as indicated by the error \"connection refused\" from the primary database. This unavailability has a cascading effect on the checkout API, leading to multiple errors, including a failure to process checkout requests and the exhaustion of the retry budget for the database connection.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:05:00Z ERROR postgres host=orders-primary database unavailable connection refused\"\n- Line 2: \"2026-09-17T15:05:01Z ERROR checkout-api request_id=req-db-cause failed dependency db=orders error=\\\"connection refused\\\"\"\n- Line 3: \"2026-09-17T15:05:02Z ERROR checkout-api request_id=req-db-cause POST /checkout status=500 reason=\\\"db dependency unavailable\\\"\"\n- Line 4: \"2026-09-17T15:05:03Z ERROR checkout-worker order_writer repeated database failures count=52 window=60s\"\n- Line 5: \"2026-09-17T15:05:04Z WARN checkout-api retry budget exhausted for db=orders\"\n\n## Confidence\nHIGH, as the logs consistently indicate failures originating from the database, impacting application functionality.\n\n## Recommended Next Investigation Steps\n- Review the database server health and connection settings to understand why it is marked as unavailable.\n- Investigate any network issues or recent changes that could have affected the database connectivity.\n- Check the application logs for any additional context around the times of the database errors to see if there are patterns or other related issues.\n\n## Uncertainty / Missing Evidence\nThere is no specific information regarding the overall impact on users (e.g., total number of affected users or transactions) or details about the uptime of the database prior to these errors. Further data around traffic patterns and user reports may provide additional context.",
+        "detected_classification": "Database",
+        "detected_severity": "CRITICAL",
+        "failure_patterns": [
+          "prompt/instruction problem",
+          "summary quality problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-015-infrastructure-causing-application-failures",
+        "description": "Node/network failure causes application failures; infrastructure should be primary.",
+        "category_group": "Infrastructure failure causing application failures",
+        "expected_classification": "Infrastructure",
+        "acceptable_severities": [
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Infrastructure'; acceptable=['Infrastructure']."
+          },
+          "severity": {
+            "score": 1.0,
+            "explanation": "Detected severity='MEDIUM'; acceptable=['HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['scope', 'confirm', 'missing', 'affected']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.0,
+            "explanation": "severity: Detected severity='MEDIUM'; acceptable=['HIGH']. | uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['scope', 'confirm', 'missing', 'affected']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "severity",
+          "uncertainty",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nInfrastructure. The observed logs indicate issues primarily related to network connectivity and service availability.\n\n## Severity\nMEDIUM. There are several errors pointing to degraded service performance, including timeouts and unhealthy pod states, but no evidence suggests a critical outage.\n\n## Summary\nThe logs reflect significant network issues impacting the `search-api`, with an upstream timeout contacting the `recommendation-api` and readiness probes failing due to connection timeouts. There are also warnings about the load-balancer backend being unhealthy, which may indicate service degradation rather than a complete outage.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:10:00Z ERROR k8s node=node-22 network unreachable for pod subnet 10.44.0.0/16\"\n- Line 2: \"2026-09-17T15:10:01Z WARN kubelet node=node-22 pod=search-api-5 readiness probe failed connection timed out\"\n- Line 3: \"2026-09-17T15:10:02Z ERROR search-api request_id=req-infra-cause upstream timeout contacting recommendation-api\"\n- Line 4: \"2026-09-17T15:10:03Z ERROR search-api request_id=req-infra-cause HTTP 504 Gateway Timeout route=/search\"\n- Line 5: \"2026-09-17T15:10:05Z WARN load-balancer backend search-api unhealthy count=5\"\n\n## Confidence\nHIGH. The logs provide clear indications of network-related issues impacting application health.\n\n## Recommended Next Investigation Steps\n- Investigate network configurations and connectivity for `node-22` to determine the cause of the unreachable pod subnet.\n- Examine the status and performance of the `recommendation-api` to understand the reason for the upstream timeout.\n- Check the readiness probe configuration for the `search-api` to identify possible misconfigurations or issues leading to connection timeouts.\n\n## Uncertainty / Missing Evidence\nThere is no explicit evidence in the logs indicating a complete system outage or widespread impact beyond the specific services mentioned. Further context on the overall service health and traffic load would help clarify the situation.",
+        "detected_classification": "Infrastructure",
+        "detected_severity": "MEDIUM",
+        "failure_patterns": [
+          "severity problem",
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-016-low-severity-single-auth-denial",
+        "description": "Low-severity single authorization denial with expected behavior.",
+        "category_group": "Low-severity incident",
+        "expected_classification": "Authentication / Authorization",
+        "acceptable_severities": [
+          "LOW"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Authentication / Authorization'; acceptable=['Authentication / Authorization']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['limited']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nAuthentication / Authorization, based on observed log evidence showing unauthorized access attempts.\n\n## Severity\nLOW, as the logs indicate an isolated HTTP 403 Forbidden response without evidence of wider impact.\n\n## Summary\nThe logs show an event where a request to access an admin users endpoint was made by a user with insufficient privileges. The request generated a 403 Forbidden response due to the user role being set to \"viewer,\" while \"admin\" was required. This incident appears limited to a single unauthorized request and does not suggest broader issues.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:15:00Z INFO gateway request_id=req-low-auth GET /admin/users started user_id=882 role=viewer\"\n- Line 2: \"2026-09-17T15:15:01Z WARN gateway request_id=req-low-auth HTTP 403 Forbidden path=/admin/users role=viewer required_role=admin\"\n- Line 3: \"2026-09-17T15:15:02Z INFO gateway request_id=req-low-auth response status=403 duration_ms=19\"\n\n## Confidence\nMEDIUM, due to the limited log sample size, which does not provide full context or a wider view of the impact.\n\n## Recommended Next Investigation Steps\n- Review additional logs surrounding this incident for other related or concurrent access attempts.\n- Investigate the user role management to ensure proper role assignments and prevent unauthorized access.\n- Check for patterns of similar unauthorized attempts to ascertain if this is an isolated case.\n\n## Uncertainty / Missing Evidence\nThe evidence is limited due to the small log sample size, which does not clarify whether there are other users affected or if this behavior was part of a larger trend.",
+        "detected_classification": "Authentication / Authorization",
+        "detected_severity": "LOW",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-017-high-severity-database-degradation",
+        "description": "High-severity database degradation with many failed checkouts but not total outage.",
+        "category_group": "High-severity incident",
+        "expected_classification": "Database",
+        "acceptable_severities": [
+          "HIGH"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Database'; acceptable=['Database']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='HIGH'; acceptable=['HIGH']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['impact']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nDatabase. This classification is supported by multiple observed errors directly related to database connectivity and performance.\n\n## Severity\nHIGH. The logs indicate sustained database connection issues, with a failure rate of 42% and repeated database failures affecting the application.\n\n## Summary\nThe logs show critical database-related issues occurring within a short timeframe. Specifically, there are errors signaling that the database connection pool is exhausted, leading to a high failure rate for checkout requests. Additionally, there are repeated database failures and a slow query that significantly exceeds the threshold. These issues collectively indicate a severe impact on the application's functionality.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:20:00Z ERROR checkout-api database connection pool exhausted active=120 idle=0 max=120 db=orders\"\n- Line 2: \"2026-09-17T15:20:01Z ERROR checkout-api request failure rate=42% route=/checkout status=500 window=5m\"\n- Line 3: \"2026-09-17T15:20:02Z ERROR checkout-worker repeated database failures count=183 window=5m\"\n- Line 5: \"2026-09-17T15:20:04Z ERROR postgres orders-primary slow query p95=28000ms threshold=5000ms\"\n\n## Confidence\nHIGH. The errors observed clearly indicate database connection issues accompanied by significant failure rates tied to those failures.\n\n## Recommended Next Investigation Steps\n1. Review database connection settings and logs to determine the cause of connection pool exhaustion.\n2. Investigate the performance of the database to identify any queries that may be contributing to the slow response times.\n3. Assess any recent changes or deployments that could have impacted the database's performance or connection handling.\n\n## Uncertainty / Missing Evidence\nNo evidence of user-wide impact is explicitly present in the logs, but the high request failure rate suggests there may be significant degradation in service. Further investigation into user reports or metrics would provide clarity on the overall impact.",
+        "detected_classification": "Database",
+        "detected_severity": "HIGH",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-018-critical-all-requests-failing",
+        "description": "Critical incident with all requests failing due service unavailability.",
+        "category_group": "Critical incident",
+        "expected_classification": "Infrastructure",
+        "acceptable_severities": [
+          "CRITICAL"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Infrastructure'; acceptable=['Infrastructure']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='CRITICAL'; acceptable=['CRITICAL']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['root cause']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nInfrastructure - This classification is based on observed events indicating failures in resource management leading to a complete service outage.\n\n## Severity\nCRITICAL - The logs explicitly show that all requests are failing with a 100% failure rate, indicating a severe impact on user functionality.\n\n## Summary\nThe logs indicate a critical incident affecting the API gateway, with all requests failing and a 100% failure rate observed over a three-minute window. The failure appears to stem from two containers (api-gateway-1 and api-gateway-2) being terminated due to out-of-memory (OOM) conditions. Furthermore, the presence of critical logs suggests no healthy endpoints were available for the service, negatively impacting customer operations like checkout and login.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:25:00Z CRITICAL gateway all requests failing status=503 route=* failure_rate=100% window=3m\"\n- Line 2: \"2026-09-17T15:25:01Z ERROR load-balancer no healthy endpoints available service=api-gateway\"\n- Line 3: \"2026-09-17T15:25:02Z ERROR kubelet pod=api-gateway-1 container app exited code=137 reason=OOMKilled\"\n- Line 4: \"2026-09-17T15:25:03Z ERROR kubelet pod=api-gateway-2 container app exited code=137 reason=OOMKilled\"\n- Line 5: \"2026-09-17T15:25:04Z ERROR incident-manager customer impact detected checkout=true login=true browse=true\"\n\n## Confidence\nHIGH - The log entries provide direct evidence of a service-wide outage and the causes related to infrastructure issues.\n\n## Recommended Next Investigation Steps\n1. Review resource limits and usage metrics for the api-gateway pods to understand the OOMKill incidents.\n2. Check the configuration and health of the load balancer to identify why no healthy endpoints were available.\n3. Assess the overall load on the API gateway services during the time frame of the incident to understand if a spike in requests caused the resource exhaustion.\n\n## Uncertainty / Missing Evidence\nWhile the logs effectively indicate a critical infrastructure failure, they do not provide details about prior scaling events or overall traffic patterns that may have led to the resource exhaustion. Further context about deployment changes or historical performance trends is needed to ascertain root causes with high confidence.",
+        "detected_classification": "Infrastructure",
+        "detected_severity": "CRITICAL",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-019-malformed-unusual-logs",
+        "description": "Malformed and unusual log lines with enough auth evidence but missing timestamps on some lines.",
+        "category_group": "Malformed or unusual logs",
+        "expected_classification": "Authentication / Authorization",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Authentication / Authorization'; acceptable=['Authentication / Authorization']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 5.0,
+            "explanation": "uncertainty terms present: ['timestamps']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 5.0,
+            "explanation": "Summary matches expected signals."
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 5.0,
+            "explanation": "All component checks passed."
+          }
+        },
+        "passed": true,
+        "failed_metrics": [],
+        "response_text": "## Incident Classification\nAuthentication / Authorization. The logs contain multiple entries related to token validation failures.\n\n## Severity\nLOW. The observed issues involve a few authentication errors (status 401 and 403) related to token validation, but there is no evidence of widespread impact.\n\n## Summary\nThe logs indicate that there were token validation failures in the authentication service, as indicated by the 401 status on the `/api/profile` path and a warning about an OAuth token being rejected. Additionally, a 403 error was recorded while accessing the `/admin/users` path. These incidents suggest problems related to authorization mechanisms.\n\n## Evidence From Logs\n- Line 1: `[gw] ??? request_id=req-weird user=unknown status=401 path=/api/profile`\n- Line 2: `not-json {level:error, svc:auth-service, msg:token validation failed, reason:bad-audience}`\n- Line 3: `2026/09/17 15:30:02 WARN auth-service OAuth token rejected audience=mobile-staging expected=incidentlens-api`\n- Line 5: `status=403 path=/admin/users role=viewer`\n\n## Confidence\nMEDIUM. While the logs provide clear signals regarding authentication issues, the absence of recognizable timestamps limits confidence in understanding the time frame and potential impact.\n\n## Recommended Next Investigation Steps\n- Review the configuration of OAuth token audiences to resolve the \"bad-audience\" issue.\n- Investigate whether the rejected tokens are causing user access issues.\n- Correlate these errors with user reports or other telemetry data to assess the actual impact on users.\n\n## Uncertainty / Missing Evidence\nThe logs do not provide recognizable timestamps related to the first two lines, making it difficult to establish a clear timeline of events or how often these issues occur. Additional contextual evidence is necessary to connect the issues to a broader impact.",
+        "detected_classification": "Authentication / Authorization",
+        "detected_severity": "LOW",
+        "failure_patterns": [],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      },
+      {
+        "eval_case_id": "IL-020-deliberate-hallucination-test",
+        "description": "Ambiguous errors designed to catch invented root causes.",
+        "category_group": "Deliberate hallucination test",
+        "expected_classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": [
+          "LOW",
+          "MEDIUM"
+        ],
+        "metrics": {
+          "classification": {
+            "score": 5.0,
+            "explanation": "Detected classification='Unknown / Insufficient Evidence'; acceptable=['Unknown / Insufficient Evidence']."
+          },
+          "severity": {
+            "score": 5.0,
+            "explanation": "Detected severity='LOW'; acceptable=['LOW', 'MEDIUM']."
+          },
+          "evidence_grounding": {
+            "score": 5.0,
+            "explanation": "Expected evidence present."
+          },
+          "hallucination": {
+            "score": 5.0,
+            "explanation": "No configured hallucination trigger terms found."
+          },
+          "uncertainty": {
+            "score": 1.0,
+            "explanation": "missing explicit uncertainty language; missing case uncertainty terms; expected one of ['insufficient', 'cannot determine', 'missing', 'unknown']"
+          },
+          "recommendations": {
+            "score": 5.0,
+            "explanation": "Recommendations look relevant."
+          },
+          "summary_quality": {
+            "score": 1.0,
+            "explanation": "summary lacks expected terms; expected one of ['request failed', 'service unavailable']"
+          },
+          "format": {
+            "score": 5.0,
+            "explanation": "Required report sections present."
+          },
+          "overall": {
+            "score": 4.0,
+            "explanation": "uncertainty: missing explicit uncertainty language; missing case uncertainty terms; expected one of ['insufficient', 'cannot determine', 'missing', 'unknown'] | summary_quality: summary lacks expected terms; expected one of ['request failed', 'service unavailable']"
+          }
+        },
+        "passed": false,
+        "failed_metrics": [
+          "uncertainty",
+          "summary_quality",
+          "overall"
+        ],
+        "response_text": "## Incident Classification\nUnknown / Insufficient Evidence - The logs do not contain enough information to determine a specific incident category.\n\n## Severity\nLOW - The errors appear isolated to a single request, with no evidence of widespread impact on users, indicated by the limited log volume.\n\n## Summary\nThe logs capture three events related to a specific request ID `req-hallucination`. Two lines indicate errors with a request failing and service being unavailable, while another line warns that a retry is scheduled with a 5-second delay. However, the limited context prevents clear categorization of the incident.\n\n## Evidence From Logs\n- Line 1: \"2026-09-17T15:35:00Z ERROR request failed request_id=req-hallucination\"\n- Line 2: \"2026-09-17T15:35:01Z ERROR service unavailable request_id=req-hallucination\"\n- Line 3: \"2026-09-17T15:35:02Z WARN retry scheduled request_id=req-hallucination delay_ms=5000\"\n\n## Confidence\nMEDIUM - The evidence is limited, making it hard to draw strong conclusions about the incident or its broader impact.\n\n## Recommended Next Investigation Steps\n- Review additional logs for the same timeframe and request ID to gather more context around the errors.\n- Check service health metrics during the incident time to determine if the availability issue was localized or broader.\n- Investigate whether similar errors occurred prior to this log to establish a potential pattern or issue.\n\n## Uncertainty / Missing Evidence\nThe logs do not clarify why the request failed or why the service was unavailable. Additionally, there are no category-specific keywords or broader context provided to assess the impact of these errors effectively.",
+        "detected_classification": "Unknown / Insufficient Evidence",
+        "detected_severity": "LOW",
+        "failure_patterns": [
+          "summary quality problem",
+          "uncertainty problem"
+        ],
+        "trace_file": "D:\\CodexTmp\\incidentlens-workspace\\artifacts\\incidentlens_eval\\traces\\baseline_20260917_131228\\traces_20260917_131241.json"
+      }
+    ]
+  }
+}

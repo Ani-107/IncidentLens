@@ -1,0 +1,665 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "IL-001-clear-application-typeerror",
+      "description": "Clear application exception with HTTP 500 and stack trace.",
+      "category_group": "Clear application incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:00:01Z INFO orders-api request_id=req-app-001 GET /orders/991 started\n2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 HTTP 500 Internal Server Error\n2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 Unhandled TypeError: Cannot read properties of undefined (reading 'total')\n2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 stacktrace: TypeError at calculateInvoiceTotal (/srv/app/invoice.js:88:14)\n2026-09-17T14:00:02Z ERROR orders-api request_id=req-app-001 stacktrace: at handleGetOrder (/srv/app/routes/orders.js:142:9)"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Application",
+        "acceptable_severities": ["MEDIUM"],
+        "evidence_terms": ["HTTP 500", "Unhandled TypeError", "calculateInvoiceTotal"],
+        "summary_terms": ["orders-api", "TypeError"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["single request", "limited", "missing", "additional logs"],
+        "recommendation_terms": ["calculateInvoiceTotal", "input data", "order"],
+        "unacceptable_terms": ["database connection pool", "OOMKilled", "token expired"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Application\",\"acceptable_severities\":[\"MEDIUM\"],\"notes\":\"Must cite the HTTP 500, TypeError, and stack trace without inventing database, auth, or infrastructure causes.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-002-clear-infrastructure-oom",
+      "description": "Clear infrastructure incident caused by memory exhaustion and no healthy endpoints.",
+      "category_group": "Clear infrastructure incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:05:00Z WARN payments-api pod=payments-api-7c9 memory usage 96 percent limit=1024Mi\n2026-09-17T14:05:02Z ERROR kernel pod=payments-api-7c9 container=app OOMKilled memory cgroup out of memory\n2026-09-17T14:05:03Z ERROR kubelet pod=payments-api-7c9 container app exited code=137 reason=OOMKilled\n2026-09-17T14:05:06Z ERROR payments-api health check failed after container restart status=503\n2026-09-17T14:05:10Z WARN load-balancer upstream payments-api no healthy endpoints available"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Infrastructure",
+        "acceptable_severities": ["HIGH", "CRITICAL"],
+        "evidence_terms": ["memory usage", "OOMKilled", "no healthy endpoints"],
+        "summary_terms": ["payments-api", "OOMKilled"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["traffic", "load", "prior", "missing"],
+        "recommendation_terms": ["memory usage", "pod", "kubelet", "resource"],
+        "forbidden_recommendation_terms": ["increase memory limits", "restart the pod", "scale up", "redeploy"],
+        "unacceptable_terms": ["database connection pool", "JWT", "TypeError"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Infrastructure\",\"acceptable_severities\":[\"HIGH\",\"CRITICAL\"],\"notes\":\"Must identify OOM/resource exhaustion and avoid remediation-first recommendations.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-003-clear-database-deadlock",
+      "description": "Clear database incident with deadlocks and transaction failures.",
+      "category_group": "Clear database incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:10:00Z INFO billing-worker batch_id=batch-44 starting invoice close\n2026-09-17T14:10:03Z ERROR billing-worker database transaction failed db=postgres database=billing error=\"deadlock detected\"\n2026-09-17T14:10:04Z ERROR postgres pid=7312 relation=invoices deadlock detected while updating row\n2026-09-17T14:10:05Z WARN billing-worker retrying SQL transaction attempt=1\n2026-09-17T14:10:07Z ERROR billing-worker transaction rollback after lock wait timeout"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Database",
+        "acceptable_severities": ["MEDIUM", "HIGH"],
+        "evidence_terms": ["deadlock detected", "postgres", "lock wait timeout"],
+        "summary_terms": ["billing-worker", "transaction"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["scope", "impact", "additional", "missing"],
+        "recommendation_terms": ["database", "deadlock", "transaction", "query"],
+        "unacceptable_terms": ["OOMKilled", "JWT", "memory leak"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Database\",\"acceptable_severities\":[\"MEDIUM\",\"HIGH\"],\"notes\":\"Must cite deadlock and lock wait timeout evidence.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-004-clear-auth-token-validation",
+      "description": "Clear authentication and authorization failures.",
+      "category_group": "Clear authentication/authorization incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:15:00Z INFO gateway request_id=req-auth-1 GET /api/profile started\n2026-09-17T14:15:01Z WARN gateway request_id=req-auth-1 HTTP 401 Unauthorized path=/api/profile\n2026-09-17T14:15:01Z ERROR auth-service request_id=req-auth-1 token validation failed reason=\"signature verification failed\" kid=prod-key-17\n2026-09-17T14:15:02Z WARN auth-service request_id=req-auth-2 OAuth token expired audience=orders-api\n2026-09-17T14:15:04Z WARN gateway request_id=req-auth-3 HTTP 403 Forbidden path=/admin/users role=viewer"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Authentication / Authorization",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["401 Unauthorized", "token validation failed", "403 Forbidden"],
+        "summary_terms": ["auth-service", "token"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["rate", "scope", "affected users", "additional"],
+        "recommendation_terms": ["token", "signature", "403", "401", "RBAC"],
+        "unacceptable_terms": ["database connection pool", "OOMKilled", "TypeError"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Authentication / Authorization\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Must ground in 401/403/token validation evidence and avoid claiming no broader impact without evidence.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-005-unknown-generic-service-failure",
+      "description": "Generic errors without enough evidence for a root-cause category.",
+      "category_group": "Unknown / insufficient evidence",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:20:00Z INFO worker job_id=job-5001 started\n2026-09-17T14:20:02Z ERROR worker job_id=job-5001 operation failed\n2026-09-17T14:20:03Z ERROR service unavailable\n2026-09-17T14:20:04Z INFO worker retry scheduled job_id=job-5001 delay_ms=5000"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["operation failed", "service unavailable"],
+        "summary_terms": ["worker", "operation failed"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["insufficient", "not enough", "missing", "cannot determine"],
+        "recommendation_terms": ["additional logs", "correlate", "metrics", "around job_id"],
+        "unacceptable_terms": ["database", "connection pool", "OOMKilled", "JWT", "root cause is"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Unknown / Insufficient Evidence\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Must not infer database, infrastructure, auth, or application root cause from generic failure text.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-006-mixed-application-database",
+      "description": "Application errors are present, but database connection exhaustion is the strongest signal.",
+      "category_group": "Mixed application + database signals",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:25:00Z INFO checkout-api request_id=req-mix-db POST /checkout started\n2026-09-17T14:25:01Z ERROR checkout-api request_id=req-mix-db database connection pool exhausted active=80 idle=0 max=80 db=orders\n2026-09-17T14:25:02Z ERROR checkout-api request_id=req-mix-db SQL query timeout after 30000ms query=insert_order\n2026-09-17T14:25:03Z ERROR checkout-api request_id=req-mix-db HTTP 500 Internal Server Error route=/checkout\n2026-09-17T14:25:04Z ERROR checkout-api request_id=req-mix-db failed to render error response: NullPointerException"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Database",
+        "acceptable_severities": ["MEDIUM", "HIGH"],
+        "evidence_terms": ["connection pool exhausted", "SQL query timeout", "HTTP 500"],
+        "summary_terms": ["database", "checkout-api"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["likely", "appears", "application errors", "downstream"],
+        "recommendation_terms": ["database", "connection pool", "query timeout", "correlate"],
+        "unacceptable_terms": ["authentication", "OOMKilled", "root cause is NullPointerException"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Database\",\"acceptable_severities\":[\"MEDIUM\",\"HIGH\"],\"notes\":\"Should treat app 500s as likely downstream symptoms, not the primary category.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-007-mixed-application-infrastructure",
+      "description": "Application 503s follow DNS/network failures; infrastructure should be primary.",
+      "category_group": "Mixed application + infrastructure signals",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:30:00Z ERROR frontend-api request_id=req-net upstream catalog-api ENOTFOUND catalog-api.service.local\n2026-09-17T14:30:01Z ERROR frontend-api request_id=req-net connection refused upstream=10.12.4.22:8080\n2026-09-17T14:30:02Z ERROR frontend-api request_id=req-net HTTP 503 Service Unavailable route=/products\n2026-09-17T14:30:03Z ERROR frontend-api request_id=req-net unhandled exception while fetching catalog response\n2026-09-17T14:30:05Z WARN kube-dns lookup failures service=catalog-api count=91 window=60s"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Infrastructure",
+        "acceptable_severities": ["MEDIUM", "HIGH"],
+        "evidence_terms": ["ENOTFOUND", "connection refused", "kube-dns"],
+        "summary_terms": ["catalog-api", "DNS"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["likely", "upstream", "confirm", "missing"],
+        "recommendation_terms": ["DNS", "service discovery", "upstream", "network"],
+        "unacceptable_terms": ["database", "token", "root cause is unhandled exception"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Infrastructure\",\"acceptable_severities\":[\"MEDIUM\",\"HIGH\"],\"notes\":\"Should prioritize DNS/network evidence over downstream app exception wording.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-008-conflicting-signals",
+      "description": "Database and auth signals appear for different requests with no clear single incident.",
+      "category_group": "Conflicting signals",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:35:00Z ERROR api request_id=req-a database connection timeout after 10000ms db=orders\n2026-09-17T14:35:01Z WARN gateway request_id=req-b HTTP 401 Unauthorized path=/api/profile\n2026-09-17T14:35:02Z ERROR auth-service request_id=req-b token validation failed reason=\"expired token\"\n2026-09-17T14:35:03Z ERROR api request_id=req-c SQL query timeout query=get_cart\n2026-09-17T14:35:04Z WARN gateway request_id=req-d HTTP 403 Forbidden path=/admin role=viewer"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": ["MEDIUM"],
+        "evidence_terms": ["database connection timeout", "401 Unauthorized", "SQL query timeout", "403 Forbidden"],
+        "summary_terms": ["multiple", "database", "auth"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["conflicting", "multiple", "insufficient", "separate"],
+        "recommendation_terms": ["request_id", "correlate", "separate", "timeline"],
+        "unacceptable_terms": ["single root cause", "database is down", "auth outage"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Unknown / Insufficient Evidence\",\"acceptable_severities\":[\"MEDIUM\"],\"notes\":\"Should not collapse unrelated database and auth signals into one unsupported root cause.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-009-noisy-logs",
+      "description": "Noisy logs with irrelevant debug/info lines and one real database signal.",
+      "category_group": "Noisy logs containing irrelevant information",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:40:00Z INFO cron heartbeat ok\n2026-09-17T14:40:01Z DEBUG feature_flag checkout_v2 enabled=false\n2026-09-17T14:40:02Z INFO marketing-banner cache refresh complete\n2026-09-17T14:40:03Z ERROR cart-api request_id=req-noise database connection timeout after 30000ms db=carts host=postgres-cart\n2026-09-17T14:40:04Z INFO metrics scrape duration_ms=18\n2026-09-17T14:40:05Z DEBUG request sampler dropped trace_id=abc123\n2026-09-17T14:40:06Z WARN cart-api request_id=req-noise retrying database query attempt=1"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Database",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["database connection timeout", "retrying database query"],
+        "summary_terms": ["cart-api", "database"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["limited", "sample", "additional", "impact"],
+        "recommendation_terms": ["cart-api", "database", "postgres-cart", "retry"],
+        "unacceptable_terms": ["feature_flag", "marketing-banner caused", "metrics scrape caused"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Database\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Should ignore irrelevant noise and cite only real database evidence.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-010-duplicate-errors",
+      "description": "Duplicate stack traces from repeated log emission should not inflate severity too aggressively.",
+      "category_group": "Duplicate errors",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup HTTP 500 Internal Server Error\n2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\n2026-09-17T14:45:00Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\n2026-09-17T14:45:01Z ERROR profile-api request_id=req-dup NullPointerException at buildProfileResponse (/srv/app/profile.js:51)\n2026-09-17T14:45:01Z ERROR profile-api request_id=req-dup response status=500 duration_ms=223"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Application",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["HTTP 500", "NullPointerException", "buildProfileResponse"],
+        "summary_terms": ["profile-api", "duplicate"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["duplicate", "same request", "scope", "additional"],
+        "recommendation_terms": ["request_id", "buildProfileResponse", "deduplicate", "frequency"],
+        "unacceptable_terms": ["widespread outage", "all users", "database", "OOMKilled"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Application\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Should note duplicate evidence/same request and avoid overcounting as a widespread outage.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-011-incomplete-logs",
+      "description": "Truncated stack trace with no root-cause context.",
+      "category_group": "Incomplete logs",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:50:00Z ERROR api request_id=req-trunc exception while handling request\n2026-09-17T14:50:00Z ERROR api request_id=req-trunc stacktrace: at handler (/srv/app/routes.js:220:11)\n2026-09-17T14:50:00Z ERROR api request_id=req-trunc stacktrace: ... truncated ...\n"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Application",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["exception while handling request", "stacktrace", "truncated"],
+        "summary_terms": ["exception", "truncated"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["truncated", "insufficient", "missing", "root cause"],
+        "recommendation_terms": ["full stack trace", "request_id", "surrounding logs"],
+        "unacceptable_terms": ["database", "memory", "token", "root cause is"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Application\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"May classify as app exception but must emphasize incomplete logs and unknown root cause.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-012-large-log-input",
+      "description": "Large-ish input with many benign lines and repeated auth errors near the end.",
+      "category_group": "Large log input",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T14:55:00Z INFO gateway healthcheck ok instance=gw-1\n2026-09-17T14:55:01Z INFO gateway healthcheck ok instance=gw-2\n2026-09-17T14:55:02Z INFO orders-api cache hit key=order:100\n2026-09-17T14:55:03Z INFO search-api query completed duration_ms=24\n2026-09-17T14:55:04Z INFO worker queue_depth=18\n2026-09-17T14:55:05Z INFO gateway request_id=req-large-1 GET /api/profile started\n2026-09-17T14:55:06Z WARN gateway request_id=req-large-1 HTTP 401 Unauthorized path=/api/profile\n2026-09-17T14:55:06Z ERROR auth-service request_id=req-large-1 token validation failed reason=\"issuer mismatch\" issuer=staging-idp\n2026-09-17T14:55:07Z INFO gateway request_id=req-large-2 GET /api/orders started\n2026-09-17T14:55:08Z WARN gateway request_id=req-large-2 HTTP 401 Unauthorized path=/api/orders\n2026-09-17T14:55:08Z ERROR auth-service request_id=req-large-2 token validation failed reason=\"issuer mismatch\" issuer=staging-idp\n2026-09-17T14:55:09Z INFO metrics scrape ok\n2026-09-17T14:55:10Z INFO search-api cache warmed\n2026-09-17T14:55:11Z WARN gateway auth failure rate=38/min baseline=4/min\n2026-09-17T14:55:12Z INFO worker heartbeat ok"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Authentication / Authorization",
+        "acceptable_severities": ["MEDIUM", "HIGH"],
+        "evidence_terms": ["401 Unauthorized", "issuer mismatch", "auth failure rate"],
+        "summary_terms": ["auth-service", "issuer mismatch"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["affected users", "scope", "confirm", "missing"],
+        "recommendation_terms": ["issuer", "identity provider", "token", "gateway"],
+        "unacceptable_terms": ["database", "OOMKilled", "cache warmed caused"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Authentication / Authorization\",\"acceptable_severities\":[\"MEDIUM\",\"HIGH\"],\"notes\":\"Should find the auth signal in noisy/longer input and cite issuer mismatch/auth failure rate.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-013-multiple-unrelated-incidents",
+      "description": "Two unrelated incidents in one input should not be forced into one root cause.",
+      "category_group": "Multiple unrelated incidents in the same input",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:00:00Z ERROR inventory-api request_id=req-inv database deadlock detected table=stock_reservations\n2026-09-17T15:00:01Z ERROR inventory-api request_id=req-inv transaction rollback after lock wait timeout\n2026-09-17T15:00:20Z ERROR media-worker job_id=img-77 OOMKilled memory cgroup out of memory\n2026-09-17T15:00:21Z ERROR kubelet pod=media-worker-2 container app exited code=137 reason=OOMKilled\n2026-09-17T15:00:22Z INFO gateway unrelated request completed status=200"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": ["HIGH", "CRITICAL"],
+        "evidence_terms": ["database deadlock", "lock wait timeout", "OOMKilled"],
+        "summary_terms": ["multiple", "unrelated"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["multiple", "separate", "unrelated", "cannot determine single"],
+        "recommendation_terms": ["separate", "timeline", "request_id", "job_id"],
+        "unacceptable_terms": ["single root cause", "database caused the OOM", "memory caused the deadlock"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Unknown / Insufficient Evidence\",\"acceptable_severities\":[\"HIGH\",\"CRITICAL\"],\"notes\":\"Should recognize multiple unrelated incident signals and avoid a single unsupported root cause.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-014-database-causing-application-failures",
+      "description": "Database failure causes application HTTP 500s; database should be primary.",
+      "category_group": "Database failure causing application failures",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:05:00Z ERROR postgres host=orders-primary database unavailable connection refused\n2026-09-17T15:05:01Z ERROR checkout-api request_id=req-db-cause failed dependency db=orders error=\"connection refused\"\n2026-09-17T15:05:02Z ERROR checkout-api request_id=req-db-cause POST /checkout status=500 reason=\"db dependency unavailable\"\n2026-09-17T15:05:03Z ERROR checkout-worker order_writer repeated database failures count=52 window=60s\n2026-09-17T15:05:04Z WARN checkout-api retry budget exhausted for db=orders"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Database",
+        "acceptable_severities": ["HIGH", "CRITICAL"],
+        "evidence_terms": ["database unavailable", "db dependency unavailable", "repeated database failures"],
+        "summary_terms": ["postgres", "checkout-api"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["impact", "duration", "scope", "missing"],
+        "recommendation_terms": ["postgres", "database availability", "dependency", "connection refused"],
+        "unacceptable_terms": ["TypeError", "auth", "OOMKilled"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Database\",\"acceptable_severities\":[\"HIGH\",\"CRITICAL\"],\"notes\":\"Should classify the database dependency failure as primary and app 500 as downstream evidence.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-015-infrastructure-causing-application-failures",
+      "description": "Node/network failure causes application failures; infrastructure should be primary.",
+      "category_group": "Infrastructure failure causing application failures",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:10:00Z ERROR k8s node=node-22 network unreachable for pod subnet 10.44.0.0/16\n2026-09-17T15:10:01Z WARN kubelet node=node-22 pod=search-api-5 readiness probe failed connection timed out\n2026-09-17T15:10:02Z ERROR search-api request_id=req-infra-cause upstream timeout contacting recommendation-api\n2026-09-17T15:10:03Z ERROR search-api request_id=req-infra-cause HTTP 504 Gateway Timeout route=/search\n2026-09-17T15:10:05Z WARN load-balancer backend search-api unhealthy count=5"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Infrastructure",
+        "acceptable_severities": ["HIGH"],
+        "evidence_terms": ["network unreachable", "readiness probe failed", "HTTP 504"],
+        "summary_terms": ["node-22", "network"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["scope", "confirm", "missing", "affected"],
+        "recommendation_terms": ["node", "network", "readiness", "load-balancer"],
+        "unacceptable_terms": ["database", "token", "code bug"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Infrastructure\",\"acceptable_severities\":[\"HIGH\"],\"notes\":\"Should identify infrastructure/network as primary and 504 as downstream impact.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-016-low-severity-single-auth-denial",
+      "description": "Low-severity single authorization denial with expected behavior.",
+      "category_group": "Low-severity incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:15:00Z INFO gateway request_id=req-low-auth GET /admin/users started user_id=882 role=viewer\n2026-09-17T15:15:01Z WARN gateway request_id=req-low-auth HTTP 403 Forbidden path=/admin/users role=viewer required_role=admin\n2026-09-17T15:15:02Z INFO gateway request_id=req-low-auth response status=403 duration_ms=19"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Authentication / Authorization",
+        "acceptable_severities": ["LOW"],
+        "evidence_terms": ["403 Forbidden", "role=viewer", "required_role=admin"],
+        "summary_terms": ["403", "admin"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["single", "limited", "expected", "scope"],
+        "recommendation_terms": ["role", "RBAC", "user", "access"],
+        "unacceptable_terms": ["outage", "database", "critical", "all users"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Authentication / Authorization\",\"acceptable_severities\":[\"LOW\"],\"notes\":\"Should keep severity low and avoid outage language.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-017-high-severity-database-degradation",
+      "description": "High-severity database degradation with many failed checkouts but not total outage.",
+      "category_group": "High-severity incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:20:00Z ERROR checkout-api database connection pool exhausted active=120 idle=0 max=120 db=orders\n2026-09-17T15:20:01Z ERROR checkout-api request failure rate=42% route=/checkout status=500 window=5m\n2026-09-17T15:20:02Z ERROR checkout-worker repeated database failures count=183 window=5m\n2026-09-17T15:20:03Z WARN checkout-api retry queue depth=940 oldest_retry_age_sec=180\n2026-09-17T15:20:04Z ERROR postgres orders-primary slow query p95=28000ms threshold=5000ms"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Database",
+        "acceptable_severities": ["HIGH"],
+        "evidence_terms": ["connection pool exhausted", "failure rate=42%", "slow query"],
+        "summary_terms": ["checkout", "database"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["not total", "duration", "scope", "impact"],
+        "recommendation_terms": ["connection pool", "slow query", "postgres", "failure rate"],
+        "unacceptable_terms": ["complete outage", "auth", "OOMKilled"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Database\",\"acceptable_severities\":[\"HIGH\"],\"notes\":\"High severity due substantial failure rate, but should not claim total outage.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-018-critical-all-requests-failing",
+      "description": "Critical incident with all requests failing due service unavailability.",
+      "category_group": "Critical incident",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:25:00Z CRITICAL gateway all requests failing status=503 route=* failure_rate=100% window=3m\n2026-09-17T15:25:01Z ERROR load-balancer no healthy endpoints available service=api-gateway\n2026-09-17T15:25:02Z ERROR kubelet pod=api-gateway-1 container app exited code=137 reason=OOMKilled\n2026-09-17T15:25:03Z ERROR kubelet pod=api-gateway-2 container app exited code=137 reason=OOMKilled\n2026-09-17T15:25:04Z ERROR incident-manager customer impact detected checkout=true login=true browse=true"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Infrastructure",
+        "acceptable_severities": ["CRITICAL"],
+        "evidence_terms": ["all requests failing", "no healthy endpoints", "OOMKilled"],
+        "summary_terms": ["100%", "api-gateway"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["confirm", "duration", "root cause", "additional"],
+        "recommendation_terms": ["api-gateway", "pod", "OOMKilled", "load-balancer"],
+        "unacceptable_terms": ["database", "token", "low severity"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Infrastructure\",\"acceptable_severities\":[\"CRITICAL\"],\"notes\":\"Must classify as critical based on all requests failing/no healthy endpoints/OOMKilled evidence.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-019-malformed-unusual-logs",
+      "description": "Malformed and unusual log lines with enough auth evidence but missing timestamps on some lines.",
+      "category_group": "Malformed or unusual logs",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n[gw] ??? request_id=req-weird user=unknown status=401 path=/api/profile\nnot-json {level:error, svc:auth-service, msg:token validation failed, reason:bad-audience}\n2026/09/17 15:30:02 WARN auth-service OAuth token rejected audience=mobile-staging expected=incidentlens-api\n### malformed trailing line ###\nstatus=403 path=/admin/users role=viewer"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Authentication / Authorization",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["status=401", "token validation failed", "status=403"],
+        "summary_terms": ["auth-service", "token"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["malformed", "timestamps", "limited", "missing"],
+        "recommendation_terms": ["request_id", "token", "audience", "gateway"],
+        "unacceptable_terms": ["database", "OOMKilled", "stack trace"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Authentication / Authorization\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Should handle malformed format, cite auth evidence, and mention missing/partial structure.\"}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "eval_case_id": "IL-020-deliberate-hallucination-test",
+      "description": "Ambiguous errors designed to catch invented root causes.",
+      "category_group": "Deliberate hallucination test",
+      "prompt": {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Analyze these production logs for incident triage:\n2026-09-17T15:35:00Z ERROR request failed request_id=req-hallucination\n2026-09-17T15:35:01Z ERROR service unavailable request_id=req-hallucination\n2026-09-17T15:35:02Z WARN retry scheduled request_id=req-hallucination delay_ms=5000"
+          }
+        ]
+      },
+      "expected": {
+        "classification": "Unknown / Insufficient Evidence",
+        "acceptable_severities": ["LOW", "MEDIUM"],
+        "evidence_terms": ["request failed", "service unavailable", "retry scheduled"],
+        "summary_terms": ["request failed", "service unavailable"],
+        "require_uncertainty": true,
+        "uncertainty_terms": ["insufficient", "cannot determine", "missing", "unknown"],
+        "recommendation_terms": ["additional logs", "correlate", "request_id", "metrics"],
+        "unacceptable_terms": ["database", "connection pool", "postgres", "mysql", "OOMKilled", "JWT", "token", "TypeError", "root cause is"]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "{\"classification\":\"Unknown / Insufficient Evidence\",\"acceptable_severities\":[\"LOW\",\"MEDIUM\"],\"notes\":\"Must explicitly avoid inventing database, auth, app exception, or infrastructure causes.\"}"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

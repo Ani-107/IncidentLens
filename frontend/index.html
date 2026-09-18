@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IncidentLens</title>
+    <link rel="stylesheet" href="/incidentlens/assets/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>IncidentLens</h1>
+        <p>Production log triage workbench</p>
+      </div>
+      <div class="status-row" aria-live="polite">
+        <span id="serverStatus" class="status-pill">Checking server</span>
+        <span id="modelStatus" class="status-pill muted">Idle</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="panel input-panel" aria-labelledby="logsHeading">
+        <div class="panel-header">
+          <div>
+            <h2 id="logsHeading">Logs</h2>
+            <p>Paste raw server or application logs.</p>
+          </div>
+          <select id="sampleSelect" aria-label="Demo scenario">
+            <option value="">Demo scenarios</option>
+          </select>
+        </div>
+
+        <textarea
+          id="logInput"
+          spellcheck="false"
+          placeholder="Paste incident logs here..."
+          aria-label="Incident logs"
+        ></textarea>
+
+        <div class="toolbar">
+          <button id="analyzeButton" class="primary" type="button">Analyze</button>
+          <button id="stopButton" type="button" disabled>Stop</button>
+          <button id="clearButton" type="button">Clear</button>
+          <button id="copyButton" type="button" disabled>Copy Report</button>
+        </div>
+      </section>
+
+      <section class="panel output-panel" aria-labelledby="reportHeading">
+        <div class="panel-header">
+          <div>
+            <h2 id="reportHeading">Incident Report</h2>
+            <p id="runMeta">No run yet.</p>
+          </div>
+          <span id="elapsedTime" class="timer">0.0s</span>
+        </div>
+
+        <div class="signal-grid" aria-label="Extracted signal summary">
+          <div class="signal-card">
+            <span>Category Hint</span>
+            <strong id="categoryHint">-</strong>
+          </div>
+          <div class="signal-card">
+            <span>Severity Hint</span>
+            <strong id="severityHint">-</strong>
+          </div>
+          <div class="signal-card">
+            <span>Signals</span>
+            <strong id="signalCount">-</strong>
+          </div>
+          <div class="signal-card">
+            <span>Log Lines</span>
+            <strong id="lineCount">-</strong>
+          </div>
+        </div>
+
+        <article id="reportOutput" class="report empty" aria-live="polite">
+          Run an analysis to view the structured incident report.
+        </article>
+
+        <details class="tool-details">
+          <summary>Extracted observations</summary>
+          <pre id="toolOutput">No tool output yet.</pre>
+        </details>
+      </section>
+    </main>
+
+    <script src="/incidentlens/assets/app.js"></script>
+  </body>
+</html>
