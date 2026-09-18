@@ -11,6 +11,7 @@ evidence, confidence, recommended next steps, and uncertainty.
 [![Google ADK](https://img.shields.io/badge/Google%20ADK-Agent%20Development%20Kit-4285F4)](https://google.github.io/adk-docs/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-local%20review%20UI-009688)](https://fastapi.tiangolo.com/)
 [![Status](https://img.shields.io/badge/status-MVP-yellow)](#current-status)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 ![IncidentLens local review UI](docs/assets/incidentlens-ui.png)
 
@@ -227,6 +228,10 @@ Edit deterministic log extraction hints in `app/tools.py`.
 
 This MVP intentionally avoids deployment, observability setup, Slack/email
 integration, automatic remediation, and complex multi-agent architecture.
+
+## License
+
+Apache License 2.0. See `LICENSE`.
 
 If IncidentLens helps you think more clearly during production incidents, a star
 helps other engineers find it.
